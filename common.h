@@ -7,7 +7,7 @@
 #define likely(x)					__builtin_expect(!!(x), 1)
 #define unlikely(x)					__builtin_expect(!!(x), 0)
 
-#define DEBUG		1
+#define DEBUG		0
 #if DEBUG
 #define log(...)	printf(__VA_ARGS__)
 #else

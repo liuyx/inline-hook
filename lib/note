@@ -1,0 +1,54 @@
+0xfffffffc  (-4)
+
+R_386_PC  S + A - P
+
+S: the value of the symbol whose index resides in the relocation entry.
+A: added found in the relocation entry
+P: is the place of the storage unit be replaced
+
+
+R_386_32 1 绝对寻址修正 S + A
+R_386_PC32 相对寻址修正 S + A - P
+
+A: 保存在被修正位置的值
+P: 被修的位置（相对于段开始的偏移量或者虚拟地址），注意，该值可通过r_offset计算得到
+S: 符号的实际地址，即由r_info的高24位指定的符号的实际地址
+
+
+a.c 
+
+extern int shared;
+
+int main() {
+	int a = 100;
+	swap(&a, &shared);
+}
+
+b.c
+
+int shared = 1;
+void swap(int *a, int *b) {
+	*a ^= *b ^= *a ^= *b;
+}
+
+shared: 绝对地址修正 R_386_32;
+S：符号shared的地址地址: 0x3000
+A 是被修正位置的值: 0x00000000
+所以这个重定位入口修正后地址为: 0x3000 + 0x00000000 = 0x3000
+即
+movl $0x3000, 0x4(%esp)
+c7 44 24 04 00 30 00 00
+
+相对地址修正:
+R_386_PC32: S + A - P
+S: 符号swap的实际地址: 0x2000
+A：被修正位置的值,即0xfffffffc(-4)
+P: 被修正的位置，当连接成可执行文件时，这个值一个盖世被修正的虚拟地址：即0x1000 + 0x27 (假设main地址为0x1000)
+这个入口地hi为：0x2000 + (-4) - (0x1000 + 0x27) = 0xFD5
+
+e8 d5 0f 00 00  call 0xfd5
+0x102b + 0xfd5 = 0x2000
+
+
+
+
