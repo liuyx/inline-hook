@@ -1,6 +1,7 @@
 test:
 	export LD_LIBRARY_PATH=.
-	gcc main.c hash.c hook.c test.S -o test -L. -ltest -g -ldl
+	g++ -std=c++11 -o $@ main.cpp -L. -linline-intel
 
-clean:
-	rm -rf test
+libinline-intel.so:
+	g++ -std=c++11 -o $@ inline-intel.cpp -fPIC -shared
+
