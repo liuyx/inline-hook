@@ -10,8 +10,10 @@ std::unordered_map<long,long> g_key_map;
 
 #ifdef __x86_64__
 #define HOOK_HEAD_SIZE	22
-#elif __x86__
+#elif defined __i386__
 #define HOOK_HEAD_SIZE  6
+#else
+#error "Error support architecture fornow"
 #endif
 
 #define PAGE_START(x,pagesize)	((x) &~ (pagesize) - 1)
@@ -30,6 +32,7 @@ int change_code_attr(void *func,int attr) {
 	return 0;
 }
 
+#ifdef __x86_64__
 int hook_x64(void *old, void *new_addr) {
 	if (change_code_attr(old,CODE_WRITE) < 0) {
 		return -1;
@@ -51,7 +54,9 @@ int hook_x64(void *old, void *new_addr) {
 
 	return 0;
 }
+#endif
 
+#ifdef __i386__
 int hook_x86(void *old, void *new_addr) {
 	if (change_code_attr(old,CODE_WRITE) < 0) {
 		return -1;
@@ -71,11 +76,12 @@ int hook_x86(void *old, void *new_addr) {
 
 	return 0;
 }
+#endif
 
 int hook(void *old, void *new_addr) {
 #ifdef __x86_64__
 	return hook_x64(old,new_addr);
-#elif __x86__
+#elif defined __i386__
 	return hook_x86(old,new_addr);
 #else
 	throw std::string("unsupported hook architecture");
