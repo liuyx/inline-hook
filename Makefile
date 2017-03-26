@@ -1,3 +1,6 @@
+all:
+	make libinline-intel.so
+	make test
 test:
 	export LD_LIBRARY_PATH=.
 	g++ -std=c++11 -o $@ main.cpp -L. -linline-intel
