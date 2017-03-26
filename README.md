@@ -1,8 +1,6 @@
-It's a simple inline-hook framework works for intel for now.
+It's a simple inline-hook framework works for intel just now, and it's based on new c++11 feature.
 
-It based on c++11 standard.
-
-The usage of the this framework is very easy,example below:
+The usage of the this framework is very easy,example shows below:
 
 int my_strcmp(const char *s1, const char *s2) {
 	return 0;
