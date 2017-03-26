@@ -8,6 +8,10 @@ int my_strcmp(const char *s1, const char *s2) {
 	return 0;
 }
 
+int my_strlen(const char *s) {
+	return 11;
+}
+
 int main() {
 	const char *s1 = "hello";
 	const char *s2 = "world";
@@ -30,6 +34,20 @@ int main() {
 	} else {
 		puts("not equal");
 	}
+
+	printf("the length of %s is %d\n",s1,strlen(s1));
+	if (hook((void *)strlen,(void *)my_strlen) < 0) {
+		perror("hook");
+		exit(1);
+	}
+
+	printf("the length of %s is %d\n",s1,strlen(s1));
+
+	if (unhook((void *)strlen) < 0) {
+		perror("unhook");
+		exit(1);
+	}
+	printf("the length of %s is %d\n",s1,strlen(s1));
 
 	return 0;
 }
