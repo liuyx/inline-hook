@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <exception>
 
-std::unordered_map<long,long> g_key_map;
+std::unordered_map<long,long> g_hook_map;
 
 #ifdef __x86_64__
 #define HOOK_HEAD_SIZE	22
@@ -44,7 +44,7 @@ int hook_x64(void *old, void *new_addr) {
 		return -1;
 
 	memcpy(save_bytes,f,HOOK_HEAD_SIZE);
-	g_key_map[(long)old] = (long)save_bytes;
+	g_hook_map[(long)old] = (long)save_bytes;
 
 	f[0] = 0xff;
 	f[1] = 0x25;
@@ -68,7 +68,7 @@ int hook_x86(void *old, void *new_addr) {
 		return -1;
 
 	memcpy(save_bytes,f,HOOK_HEAD_SIZE);
-	g_key_map[(long)old] = (long)save_bytes;
+	g_hook_map[(long)old] = (long)save_bytes;
 
 	f[0] = 0x68;
 	*(long *)&f[1] = (long)new_addr;
@@ -90,7 +90,7 @@ int hook(void *old, void *new_addr) {
 
 int unhook(void *old) {
 	const int size = HOOK_HEAD_SIZE;
-	long addr = g_key_map[(long)old];
+	long addr = g_hook_map[(long)old];
 	if (addr == 0) 
 		throw std::string("it must be hooked before");
 	memcpy(old,(void *)addr,size);
