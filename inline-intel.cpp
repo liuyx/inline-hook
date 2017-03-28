@@ -5,8 +5,12 @@
 #include <sys/mman.h>
 #include <unordered_map>
 #include <exception>
+#include <thread>
+#include <mutex>
 
 std::unordered_map<long,long> g_hook_map;
+std::mutex g_func_mutex;
+
 
 #ifdef __x86_64__
 #define HOOK_HEAD_SIZE	22
@@ -79,6 +83,7 @@ int hook_x86(void *old, void *new_addr) {
 #endif
 
 int hook(void *old, void *new_addr) {
+	std::lock_guard<std::mutex> lock(g_func_mutex);
 #ifdef __x86_64__
 	return hook_x64(old,new_addr);
 #elif defined __i386__
