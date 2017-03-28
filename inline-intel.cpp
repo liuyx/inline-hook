@@ -83,7 +83,7 @@ int hook_x86(void *old, void *new_addr) {
 #endif
 
 int hook(void *old, void *new_addr) {
-	std::lock_guard<std::mutex> lock(g_func_mutex);
+	//std::lock_guard<std::mutex> lock(g_func_mutex);
 #ifdef __x86_64__
 	return hook_x64(old,new_addr);
 #elif defined __i386__
