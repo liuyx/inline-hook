@@ -4,11 +4,20 @@
 #include <future>
 #include <mutex>
 #include <thread>
+#include <random>
+#include <ctime>
+#include <vector>
+#include <ctime>
 
-std::recursive_mutex g_mutex;
+std::mutex g_mutex;
+
+void print(const char *s) {
+	std::lock_guard<std::mutex> lock(g_mutex);
+	puts(s);
+}
 
 int my_strcmp(const char *s1, const char *s2) {
-	puts("hahahahah,it's been hooked");
+	print("hahahahah,it's been hooked");
 	return 0;
 }
 
@@ -17,48 +26,62 @@ int my_strlen(const char *s) {
 }
 
 int do_strcmp(const char *s1, const char *s2) {
-	std::lock_guard<std::recursive_mutex> lock(g_mutex);
-	std::cout << "the threadid = " << pthread_self() << std::endl;
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	return strcmp(s1,s2);
+}
+
+static int counter;
+
+void f() {
+	//static std::default_random_engine e(time(0));
+	//static std::uniform_int_distribution<unsigned> u(10,50);
+	if (counter++ & 1)
+	//	std::this_thread::sleep_for(std::chrono::milliseconds(u(e)));
+	//else
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	const char *s1 = "hello";
+	const char *s2 = "world";
+	if (strcmp(s1,s2) == 0) {
+		print("in f equal");
+	} else {
+		print("in f not equal");
+	}
 }
 
 int main() {
 	const char *s1 = "hello";
 	const char *s2 = "world";
 
-	std::future<int> fut = std::async(std::launch::async,do_strcmp,s1,s2);
+	std::vector<std::thread> vec;
+	for (int i = 0; i < 10; i++) {
+		vec.push_back(std::thread(f));
+	}
 
-	std::lock_guard<std::recursive_mutex> lock(g_mutex);
-	std::cout << "the result is " << fut.get() << std::endl;
-
+	print("start hook in main thread");
 	if (hook((void *)strcmp,(void *)my_strcmp) < 0) {
 		perror("hook");
 		exit(1);
 	}
+
 	if (strcmp(s1,s2) == 0) {
-		puts("equal");
+		print("equal");
 	} else {
-		puts("not equal");
+		print("not equal");
 	}
 
-	std::future<int> fut2 = std::async(std::launch::deferred,do_strcmp,s1,s2);
-
-	std::cout << "the result is " << fut2.get() << std::endl;
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	if (unhook((void *)strcmp) < 0) {
 		perror("unhook");
 		exit(1);
 	}
 	if (strcmp(s1,s2) == 0) {
-		puts("equal");
+		print("equal");
 	} else {
-		puts("not equal");
+		print("not equal");
 	}
 
-	std::future<int> fut3 = std::async(std::launch::deferred,do_strcmp,s1,s2);
-
-	std::cout << "the result is " << fut3.get() << std::endl;
+	for (auto &t : vec)
+		t.join();
 
 	return 0;
 }
