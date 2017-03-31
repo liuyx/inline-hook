@@ -1,4 +1,4 @@
-It's a simple inline-hook framework works for intel just now, and it's based on new c++11 feature.
+It's a simple inline-hook framework works for intel(32,bit) and arm(only works for arm32 and thumb) just now, and it's based on new c++11 feature.
 
 The usage of the this framework is very easy,example shows below:
 
