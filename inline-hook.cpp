@@ -11,7 +11,9 @@
 #include <mutex>
 #include <cstdlib>
 
-#if defined(__arm__ || __thumb__)
+#ifdef __arm__
+#include <sys/cachectl.h>
+#elif defined(__thumb__)
 #include <sys/cachectl.h>
 #endif
 
@@ -29,7 +31,7 @@ std::mutex g_func_mutex;
 #error "Error support architecture fornow"
 #endif
 
-#define PAGE_START(x,pagesize)	((x) &~ (pagesize) - 1)
+#define PAGE_START(x,pagesize)	((x) &~ ((pagesize) - 1))
 
 #define CODE_WRITE				PROT_READ | PROT_WRITE | PROT_EXEC
 #define CODE_READ_ONLY			PROT_READ | PROT_EXEC
