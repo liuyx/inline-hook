@@ -16,15 +16,15 @@ std::unique_ptr<hooker::HookerFactory> hooker::HookerFactory::getInstance() {
     return std::move(sInstance);
 }
 
-hooker::Hooker* hooker::HookerFactory::getHooker() {
+std::unique_ptr<hooker::Hooker> hooker::HookerFactory::getHooker() {
 #ifdef __x86_64__
-    return new hooker::HookerX64;
+    return std::unique_ptr<hooker::Hooker>(std::move(new hooker::HookerX64));
 #elif defined(__i386__)
-    return new HookerX86;
+    return std::unique_ptr<hooker::Hooker>(std::move(new HookerX86));
 #elif defined(__arm__)
-    return new HookerArm;
+    return std::unique_ptr<hooker::Hooker>(std::move(new HookerArm));
 #elif defined(__thumb__)
-    return new HookerThumb;
+    return std::unique_ptr<hooker::Hooker>(std::move(new HookerThumb));
 #else
 	throw std::string("unsupported hook architecture");
 #endif
