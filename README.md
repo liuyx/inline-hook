@@ -5,7 +5,7 @@ the framework based on cmake 2.8, all you have to do is:<br/>
 cmake .</br>
 make<br/>
 
-<b>How to use</b><br/>:
+<b>How to use</b>:<br/>
 The usage of the this framework is very easy,example(main.cpp) shows below:<br/>
 
 int my_strcmp(const char *s1, const char *s2) <br/>
@@ -13,15 +13,15 @@ int my_strcmp(const char *s1, const char *s2) <br/>
 	return 0;<br/>
 }<br/><br/>
 
-const char *s1 = "hello";<br/><br/>
+const char *s1 = "hello";<br/>
 
-const char *s2 = "world";<br/><br/>
+const char *s2 = "world";<br/>
 
 if (hook((void *)strcmp,(void *)my_strcmp) < 0) <br/>
 {<br/>
 	perror("hook");<br/>
 	exit(1);<br/>
-}<br/><br/>
+}<br/>
 
 if (strcmp(s1,s2) == 0) <br/>
 {<br/>
@@ -30,7 +30,7 @@ if (strcmp(s1,s2) == 0) <br/>
 else<br/>
 {<br/>
 	puts("not equal");<br/>
-}<br/><br/>
+}<br/>
 
 The output is equal.
 
