@@ -8,10 +8,12 @@ make<br/>
 <b>How to use</b>:<br/>
 The usage of the this framework is very easy,example(main.cpp) shows below:<br/>
 
+```c++
+
 int my_strcmp(const char *s1, const char *s2) <br/>
 {<br/>
 	return 0;<br/>
-}<br/><br/>
+}<br/>
 
 const char *s1 = "hello";<br/>
 
@@ -31,6 +33,8 @@ else<br/>
 {<br/>
 	puts("not equal");<br/>
 }<br/>
+
+```
 
 The output is equal.
 
