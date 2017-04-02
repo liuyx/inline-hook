@@ -13,10 +13,7 @@ namespace hooker {
     class HookerFactory {
     public:
         static std::unique_ptr<HookerFactory> getInstance();
-        Hooker* getHooker();
-        HookerFactory(const HookerFactory&) = delete;
-        HookerFactory&operator=(const HookerFactory&) = delete;
-        ~HookerFactory() = default;
+		std::unique_ptr<Hooker> getHooker();
     private:
         explicit HookerFactory(){}
     };
