@@ -2,7 +2,7 @@
 #define __CONFIG_H__
 
 #ifdef __x86_64__
-#include "Hooker64.h"
+#include "HookerX64.h"
 #elif defined(__i386__)
 #include "HookerX86.h"
 #elif defined(__arm__)

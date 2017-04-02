@@ -1,6 +1,12 @@
-It's a simple inline-hook framework works for intel(32,bit) and arm(only works for arm32 and thumb) just now, and it's based on new c++11 feature.
+It's a simple inline-hook framework works for intel(32bit,64bit) and arm(only works for arm32 and thumb) just now, and it's based on new c++11 feature.
 
-The usage of the this framework is very easy,example shows below:
+<b>How to build</b>:
+the framework based on cmake 2.8, all you have to do is:
+cmake .
+make
+
+<b>How to use</b>:
+The usage of the this framework is very easy,example(main.cpp) shows below:
 
 int my_strcmp(const char *s1, const char *s2) 
 {
