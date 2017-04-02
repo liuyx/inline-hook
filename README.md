@@ -10,29 +10,40 @@ The usage of the this framework is very easy,example(main.cpp) shows below:<br/>
 
 ```c++
 
-int my_strcmp(const char *s1, const char *s2) <br/>
-{<br/>
-	return 0;<br/>
-}<br/>
+void print(const char *s) {
+    std::cout << s << std::endl;
+}
 
-const char *s1 = "hello";<br/>
+int my_strcmp(const char *s1, const char *s2) {
+    std::cout << s1 << " " << s2 << ",haha, it's been hooked" << std::endl;
+    return 0;
+}
 
-const char *s2 = "world";<br/>
+int main() {
+    const char *s1 = "hello";
+    const char *s2 = "world";
 
-if (hook((void *)strcmp,(void *)my_strcmp) < 0) <br/>
-{<br/>
-	perror("hook");<br/>
-	exit(1);<br/>
-}<br/>
+    using namespace hooker;
+    std::unique_ptr<HookerFactory> factory = HookerFactory::getInstance();
+    std::unique_ptr<Hooker> hooker = factory->getHooker();
+    hooker->hook(reinterpret_cast<void *>(strcmp), reinterpret_cast<void *>(my_strcmp), nullptr);
 
-if (strcmp(s1,s2) == 0) <br/>
-{<br/>
-	puts("equal");<br/>
-}<br/>
-else<br/>
-{<br/>
-	puts("not equal");<br/>
-}<br/>
+    if (strcmp(s1,s2) == 0) {
+        print("equal");
+    } else {
+        print("not equal");
+    }
+
+    hooker->unhook(reinterpret_cast<void *>(strcmp));
+
+    if (strcmp(s1,s2) == 0) {
+        print("equal");
+    } else {
+        print("not equal");
+    }
+
+    return 0;
+}
 
 ```
 
