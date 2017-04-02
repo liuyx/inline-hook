@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(hooker-test)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "-std=c++11")
+add_subdirectory(src bin)
+add_subdirectory(hooker libs)
 
-set(SOURCE_FILES main.cpp Hooker.cpp Hooker.h HookerFactory.cpp HookerFactory.h HookerX64.cpp HookerX64.h HookerX86.cpp HookerX86.h HookerArm.cpp HookerArm.h HookerThumb.cpp HookerThumb.h)
-add_executable(hooker-test ${SOURCE_FILES})
