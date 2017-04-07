@@ -12,7 +12,7 @@ class HookerX64 : public Hooker {
 public:
     void doHook(void *func, void *newAddr, void **origFunc);
     size_t getHookHeadSize() {
-        return 22;
+        return 14;
     }
 };
 }
