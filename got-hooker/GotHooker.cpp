@@ -67,6 +67,7 @@ ElfW(Addr) hooker::got::GotHooker::findRel(const char *func) {
 	char *name;
 	for (int i = 0; i < relPltCnt; i++) {
 		rel = &relPlt[i];
+#ifdef __i386__
 		if (ELF32_R_TYPE(rel->r_info) == R_386_JMP_SLOT) {
 			index = ELF32_R_SYM(rel->r_info);
 			name = (char *)&dynstr[dynsym[index].st_name];
@@ -75,6 +76,16 @@ ElfW(Addr) hooker::got::GotHooker::findRel(const char *func) {
 				return (ElfW(Addr))rel->r_offset;
 			}
 		}
+#elif defined(__x86__64)
+		if (ELF64_R_TYPE(rel->r_info) == R_X86_64_JMP_SLOT) {
+			index = ELF64_R_SYM(rel->r_info);
+			name = (char *)&dynstr[dynsym[index].st_name];
+
+			if (strncmp(name, func, funcLen) == 0) {
+				return (ElfW(Addr))rel->r_offset;
+			}
+		}
+#endif
 	}
 	return 0;
 }
