@@ -1,0 +1,8 @@
+bin/
+libs/
+CMakeCache.txt
+*.cmake
+CMakeFiles/
+*.so
+hooker-test
+Makefile

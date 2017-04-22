@@ -5,8 +5,9 @@
 #include <utility>
 #include <memory>
 #include <mutex>
-#include "HookerFactory.h"
-#include "config.h"
+#include <HookerFactory.h>
+#include <config.h>
+#include <HookerError.h>
 
 std::unique_ptr<hooker::HookerFactory> hooker::HookerFactory::getInstance() {
     static std::unique_ptr<hooker::HookerFactory> sInstance;
@@ -28,7 +29,7 @@ std::unique_ptr<hooker::Hooker> hooker::HookerFactory::getHooker() {
 #elif defined(__thumb__)
     return std::unique_ptr<hooker::Hooker>(std::move(new hooker::HookerThumb));
 #else
-	throw std::string("unsupported hook architecture");
+	throw hooker::error::HookerError("unsupported hook architecture");
 #endif
 
 }

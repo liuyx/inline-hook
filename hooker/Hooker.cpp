@@ -9,13 +9,14 @@
 #include <cstdlib>
 #include <cstring>
 #include "Hooker.h"
+#include "HookerError.h"
 
 void hooker::Hooker::changeCodeAttrs(void *func, int attr) {
     int pagesize = getpagesize();
     long start = PAGE_START((long)func,pagesize);
 
     if (mprotect((void *)start, (size_t)pagesize, attr) < 0) {
-        throw std::string("mprotect error");
+        throw hooker::error::HookerError("mprotect error");
     }
 }
 
@@ -31,7 +32,7 @@ void hooker::Hooker::saveOriginFuncBytes(void *func) {
 
     void *save_bytes = malloc(hookHeadSize);
     if (save_bytes == nullptr)
-        throw std::string("malloc error");
+        throw hooker::error::HookerError("malloc error");
 
     memcpy(save_bytes,func,hookHeadSize);
     gHookedMap[(long)func] = (long)(save_bytes);
@@ -41,7 +42,7 @@ void hooker::Hooker::saveOriginFuncBytes(void *func) {
 void hooker::Hooker::doUnHook(void *func) {
     long addr = gHookedMap[(long)func];
     if (addr == 0)
-        throw std::string("it must be hooked before");
+        throw hooker::error::HookerError("it must be hooked before");
     memcpy(func,(void *)addr,getHookHeadSize());
     free((void *)addr);
 }
