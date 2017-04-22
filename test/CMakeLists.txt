@@ -1,6 +1,3 @@
-cmake_minimum_required(VERSION 2.8)
-project(hooker-test)
-
 include_directories(${PROJECT_SOURCE_DIR}/libs)
 
 set(CMAKE_CXX_STANDARD 11)
