@@ -8,14 +8,17 @@
 #include <mutex>
 #include <memory>
 #include "Hooker.h"
+#include "singleton.h"
 
 namespace hooker {
     class HookerFactory {
     public:
-        static std::unique_ptr<HookerFactory> getInstance();
+        static HookerFactory* getInstance();
 		std::unique_ptr<Hooker> getHooker();
     private:
         explicit HookerFactory(){}
+		friend class utils::design_pattern::NewPolicy<HookerFactory>;
+		friend class utils::design_pattern::Singleton<HookerFactory>;
     };
 }
 

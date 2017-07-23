@@ -9,14 +9,9 @@
 #include <config.h>
 #include <HookerError.h>
 
-std::unique_ptr<hooker::HookerFactory> hooker::HookerFactory::getInstance() {
-    static std::unique_ptr<hooker::HookerFactory> sInstance;
-    static std::mutex sMutex;
-    std::lock_guard<std::mutex> lock(sMutex);
-    if (sInstance == nullptr)
-        sInstance.reset(new hooker::HookerFactory);
-
-    return std::move(sInstance);
+hooker::HookerFactory* hooker::HookerFactory::getInstance() {
+	using namespace utils::design_pattern;
+	return Singleton<HookerFactory,MultiThreadPolicy>::getInstance();
 }
 
 std::unique_ptr<hooker::Hooker> hooker::HookerFactory::getHooker() {
