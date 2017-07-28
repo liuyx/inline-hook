@@ -61,6 +61,7 @@ void hooker::Hooker::doUnHook(void *func) {
         throw hooker::error::HookerError("it must be hooked before");
     memcpy(func,(void *)addr,getHookHeadSize());
     free((void *)addr);
+	gHookedMap.erase((long)func);
 }
 
 void hooker::Hooker::unhook(void *func) {
