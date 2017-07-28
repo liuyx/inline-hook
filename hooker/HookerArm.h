@@ -15,6 +15,9 @@ namespace hooker {
         size_t getHookHeadSize() {
             return 8;
         }
+		size_t getOrigFunctionSize() {
+			return 2 * getHookHeadSize();
+		}
     };
 }
 

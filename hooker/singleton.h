@@ -13,7 +13,7 @@ struct SingleThreadModel {
 
 template <typename T>
 struct NewPolicy {
-	static T* Create() {
+	static T* create() {
 		return new T;
 	}
 };
@@ -65,7 +65,7 @@ template <
 T* Singleton<T,ThreadingModel,CreatePolicy, DestroyPolicy>::getInstance() {
 	if (!pInstance_) {
 		typename ThreadingModel<T>::Lock lock;
-		pInstance_ = CreatePolicy<T>::Create();
+		pInstance_ = CreatePolicy<T>::create();
 	}
 	return const_cast<T*>(pInstance_);
 

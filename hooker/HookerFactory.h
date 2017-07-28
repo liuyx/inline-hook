@@ -14,9 +14,16 @@ namespace hooker {
     class HookerFactory {
     public:
         static HookerFactory* getInstance();
-		std::unique_ptr<Hooker> getHooker();
+		Hooker* getHooker() const;
+		Hooker* createHooker();
+		~HookerFactory() {
+			delete hooker;
+		}
     private:
-        explicit HookerFactory(){}
+		Hooker* hooker;
+        HookerFactory(){
+			hooker = createHooker();
+		}
 		friend class utils::design_pattern::NewPolicy<HookerFactory>;
 		friend class utils::design_pattern::Singleton<HookerFactory>;
     };

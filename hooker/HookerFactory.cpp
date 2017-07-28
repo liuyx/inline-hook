@@ -11,21 +11,24 @@
 
 hooker::HookerFactory* hooker::HookerFactory::getInstance() {
 	using namespace utils::design_pattern;
-	return Singleton<HookerFactory,MultiThreadPolicy>::getInstance();
+	HookerFactory* result =  Singleton<HookerFactory,MultiThreadPolicy>::getInstance();
 }
 
-std::unique_ptr<hooker::Hooker> hooker::HookerFactory::getHooker() {
+hooker::Hooker* hooker::HookerFactory::createHooker() {
 #ifdef __x86_64__
-    return std::unique_ptr<hooker::Hooker>(std::move(new hooker::HookerX64));
+    return new hooker::HookerX64;
 #elif defined(__i386__)
-    return std::unique_ptr<hooker::Hooker>(std::move(new hooker::HookerX86));
+    return new hooker::HookerX86;
 #elif defined(__arm__)
-    return std::unique_ptr<hooker::Hooker>(std::move(new hooker::HookerArm));
+    return new hooker::HookerArm;
 #elif defined(__thumb__)
-    return std::unique_ptr<hooker::Hooker>(std::move(new hooker::HookerThumb));
+    return new hooker::HookerThumb;
 #else
 	throw hooker::error::HookerError("unsupported hook architecture");
 #endif
+}
 
+hooker::Hooker* hooker::HookerFactory::getHooker() const {
+	return hooker;
 }
 

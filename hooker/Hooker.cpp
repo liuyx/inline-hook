@@ -8,6 +8,7 @@
 #include <string>
 #include <cstdlib>
 #include <cstring>
+#include <assert.h>
 #include "Hooker.h"
 #include "HookerError.h"
 
@@ -20,22 +21,37 @@ void hooker::Hooker::changeCodeAttrs(void *func, int attr) {
     }
 }
 
-void hooker::Hooker::hook(void *func, void *newAddr, void **origFunc) {
+void hooker::Hooker::hook(void *func, void *newAddr, void **origFunc, bool saveOrig) {
     changeCodeAttrs(func,CODE_WRITE);
-    saveOriginFuncBytes(func);
+
+	if (saveOrig)
+		saveOriginFuncBytes(func);
+
     doHook(func,newAddr,origFunc);
+
     changeCodeAttrs(func,CODE_READ_ONLY);
 }
 
 void hooker::Hooker::saveOriginFuncBytes(void *func) {
     const size_t hookHeadSize = getHookHeadSize();
+	const size_t originFunctionSize = getOrigFunctionSize();
+	assert(originFunctionSize >= hookHeadSize);
 
     void *save_bytes = malloc(hookHeadSize);
     if (save_bytes == nullptr)
         throw hooker::error::HookerError("malloc error");
 
+	// save the origin bytes here.
     memcpy(save_bytes,func,hookHeadSize);
     gHookedMap[(long)func] = (long)(save_bytes);
+
+	// and now, we want to insert a jump to the next instruction
+	// after the hooked start.
+	if (originFunctionSize > hookHeadSize) {
+		char *f = (char *)func;
+		char *n = (char *)save_bytes;
+		hook((void *)&n[hookHeadSize],(void *)&f[hookHeadSize],nullptr, false);
+	}
 
 }
 

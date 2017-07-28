@@ -21,7 +21,7 @@ int main() {
 
     using namespace hooker;
     HookerFactory* factory = HookerFactory::getInstance();
-    std::unique_ptr<Hooker> hooker = factory->getHooker();
+    Hooker* hooker = factory->getHooker();
     hooker->hook(reinterpret_cast<void *>(strcmp), reinterpret_cast<void *>(my_strcmp), nullptr);
 
     if (strcmp(s1,s2) == 0) {

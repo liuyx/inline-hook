@@ -16,9 +16,16 @@ namespace hooker {
     class Hooker {
     public:
         void changeCodeAttrs(void *func, int attr);
-        void hook(void *func, void *newAddr, void **origFunc);
+        void hook(void *func, void *newAddr, void **origFunc, bool saveOrig = true);
         void unhook(void *func);
         virtual size_t getHookHeadSize() = 0;
+
+		// when construct the origin function, it's best to know
+		// how many bytes should we allocate, so when we just use
+		// the origin function as normal.
+		virtual size_t getOrigFunctionSize() {
+			return getHookHeadSize();
+		}
 
     protected:
         virtual void doHook(void *func, void *newAddr, void **origFunc) = 0;
