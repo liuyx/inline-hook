@@ -24,9 +24,9 @@ int main() {
     const char *s2 = "world";
 
     using namespace hooker;
-    std::unique_ptr<HookerFactory> factory = HookerFactory::getInstance();
-    std::unique_ptr<Hooker> hooker = factory->getHooker();
-    hooker->hook(reinterpret_cast<void *>(strcmp), reinterpret_cast<void *>(my_strcmp), nullptr);
+    HookerFactory* factory = HookerFactory::getInstance();
+    const Hooker& hooker = factory->getHooker();
+    hooker.hook(reinterpret_cast<void *>(strcmp), reinterpret_cast<void *>(my_strcmp), nullptr);
 
     if (strcmp(s1,s2) == 0) {
         print("equal");
@@ -34,18 +34,21 @@ int main() {
         print("not equal");
     }
 
-    hooker->unhook(reinterpret_cast<void *>(strcmp));
+    hooker.unhook(reinterpret_cast<void *>(strcmp));
 
     if (strcmp(s1,s2) == 0) {
         print("equal");
     } else {
         print("not equal");
     }
+
+	delete factory;
 
     return 0;
 }
 
 ```
 
-The output is equal.
+The output is as below:
+![image](img/crop.png)
 
