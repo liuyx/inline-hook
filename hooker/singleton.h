@@ -72,8 +72,17 @@ T* Singleton<T,ThreadingModel,CreatePolicy, DestroyPolicy>::getInstance() {
 
 }
 
+class Uncopable {
+public:
+	Uncopable() {}
+	~Uncopable() {}
+private:
+	Uncopable(const Uncopable&);
+	Uncopable& operator = (const Uncopable&);
+};
+
 template <typename T>
-struct MultiThreadPolicy {
+struct MultiThreadPolicy : private Uncopable {
 	typedef T volatile InstanceType;
 	static std::mutex sMutex;
 	struct Lock {
