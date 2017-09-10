@@ -6,7 +6,7 @@
 #include <sys/cachectl.h>
 #include "HookerThumb.h"
 
-void hooker::HookerThumb::doHook(void *func, void *newAddr, void **origFunc) {
+void hooker::HookerThumb::doHook(void *func, void *newAddr, void **origFunc) const {
 	long addr = (long)func;
 	long clearBit0 = addr & 0xfffffffe;
 	char *f = (char *)clearBit0;

@@ -21,8 +21,8 @@ int main() {
 
     using namespace hooker;
     HookerFactory* factory = HookerFactory::getInstance();
-    Hooker* hooker = factory->getHooker();
-    hooker->hook(reinterpret_cast<void *>(strcmp), reinterpret_cast<void *>(my_strcmp), nullptr);
+    const Hooker& hooker = factory->getHooker();
+    hooker.hook(reinterpret_cast<void *>(strcmp), reinterpret_cast<void *>(my_strcmp), nullptr);
 
     if (strcmp(s1,s2) == 0) {
         print("equal");
@@ -30,7 +30,7 @@ int main() {
         print("not equal");
     }
 
-    hooker->unhook(reinterpret_cast<void *>(strcmp));
+    hooker.unhook(reinterpret_cast<void *>(strcmp));
 
     if (strcmp(s1,s2) == 0) {
         print("equal");

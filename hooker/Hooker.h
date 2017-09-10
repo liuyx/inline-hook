@@ -15,24 +15,26 @@ namespace hooker {
 
     class Hooker {
     public:
-        void changeCodeAttrs(void *func, int attr);
-        void hook(void *func, void *newAddr, void **origFunc, bool saveOrig = true);
-        void unhook(void *func);
-        virtual size_t getHookHeadSize() = 0;
+        void changeCodeAttrs(void *func, int attr) const;
+        void hook(void *func, void *newAddr, void **origFunc, bool saveOrig = true) const;
+        void unhook(void *func) const;
+        virtual size_t getHookHeadSize() const = 0;
 
 		// when construct the origin function, it's best to know
 		// how many bytes should we allocate, so when we just use
 		// the origin function as normal.
-		virtual size_t getOrigFunctionSize() {
+		virtual size_t getOrigFunctionSize() const {
 			return getHookHeadSize();
 		}
 
+		virtual ~Hooker() = 0;
+
     protected:
-        virtual void doHook(void *func, void *newAddr, void **origFunc) = 0;
-        virtual void doUnHook(void *func);
-        std::unordered_map<long,long> gHookedMap;
+        virtual void doHook(void *func, void *newAddr, void **origFunc) const = 0;
+        virtual void doUnHook(void *func) const;
+        mutable std::unordered_map<long,long> gHookedMap;
     private:
-        void saveOriginFuncBytes(void *func);
+        void saveOriginFuncBytes(void *func) const;
     };
 }
 

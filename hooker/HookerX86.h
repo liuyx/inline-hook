@@ -11,10 +11,11 @@
 namespace hooker {
     class HookerX86 : public Hooker {
     public:
-        void doHook(void *func, void *newAddr, void **origFunc);
-        size_t getHookHeadSize() {
+        void doHook(void *func, void *newAddr, void **origFunc) const;
+        size_t getHookHeadSize() const{
             return 6;
         }
+		~HookerX86() {}
     };
 }
 

@@ -7,7 +7,7 @@
 #include <string>
 #include "HookerX64.h"
 
-void hooker::HookerX64::doHook(void *func,void *newAddr,void **origFunc) {
+void hooker::HookerX64::doHook(void *func,void *newAddr,void **origFunc) const {
     char *f = (char *)func;
     *(uint16_t *)&f[0] = 0x25ff;
     *(int *)&f[2] = 0x00000000;

@@ -14,7 +14,7 @@ namespace hooker {
     class HookerFactory {
     public:
         static HookerFactory* getInstance();
-		Hooker* getHooker() const;
+		const Hooker& getHooker() const;
 		Hooker* createHooker();
 		~HookerFactory() {
 			delete hooker;

@@ -12,6 +12,7 @@
 hooker::HookerFactory* hooker::HookerFactory::getInstance() {
 	using namespace utils::design_pattern;
 	HookerFactory* result =  Singleton<HookerFactory,MultiThreadPolicy>::getInstance();
+	return result;
 }
 
 hooker::Hooker* hooker::HookerFactory::createHooker() {
@@ -28,7 +29,7 @@ hooker::Hooker* hooker::HookerFactory::createHooker() {
 #endif
 }
 
-hooker::Hooker* hooker::HookerFactory::getHooker() const {
-	return hooker;
+const hooker::Hooker& hooker::HookerFactory::getHooker() const {
+	return *hooker;
 }
 

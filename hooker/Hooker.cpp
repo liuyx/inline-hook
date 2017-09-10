@@ -12,7 +12,9 @@
 #include "Hooker.h"
 #include "HookerError.h"
 
-void hooker::Hooker::changeCodeAttrs(void *func, int attr) {
+hooker::Hooker::~Hooker() {}
+
+void hooker::Hooker::changeCodeAttrs(void *func, int attr) const {
     int pagesize = getpagesize();
     long start = PAGE_START((long)func,pagesize);
 
@@ -21,7 +23,7 @@ void hooker::Hooker::changeCodeAttrs(void *func, int attr) {
     }
 }
 
-void hooker::Hooker::hook(void *func, void *newAddr, void **origFunc, bool saveOrig) {
+void hooker::Hooker::hook(void *func, void *newAddr, void **origFunc, bool saveOrig) const {
     changeCodeAttrs(func,CODE_WRITE);
 
 	if (saveOrig)
@@ -32,7 +34,7 @@ void hooker::Hooker::hook(void *func, void *newAddr, void **origFunc, bool saveO
     changeCodeAttrs(func,CODE_READ_ONLY);
 }
 
-void hooker::Hooker::saveOriginFuncBytes(void *func) {
+void hooker::Hooker::saveOriginFuncBytes(void *func) const {
     const size_t hookHeadSize = getHookHeadSize();
 	const size_t originFunctionSize = getOrigFunctionSize();
 	assert(originFunctionSize >= hookHeadSize);
@@ -55,7 +57,7 @@ void hooker::Hooker::saveOriginFuncBytes(void *func) {
 
 }
 
-void hooker::Hooker::doUnHook(void *func) {
+void hooker::Hooker::doUnHook(void *func) const {
     long addr = gHookedMap[(long)func];
     if (addr == 0)
         throw hooker::error::HookerError("it must be hooked before");
@@ -64,7 +66,7 @@ void hooker::Hooker::doUnHook(void *func) {
 	gHookedMap.erase((long)func);
 }
 
-void hooker::Hooker::unhook(void *func) {
+void hooker::Hooker::unhook(void *func) const {
     changeCodeAttrs(func,CODE_WRITE);
     doUnHook(func);
     changeCodeAttrs(func,CODE_READ_ONLY);

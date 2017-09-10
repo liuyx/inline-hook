@@ -1,6 +1,7 @@
 #ifndef _SINGLETON_H_
 #define _SINGLETON_H_
 #include <mutex>
+#include <cstdlib>
 
 namespace utils {
 namespace design_pattern{
