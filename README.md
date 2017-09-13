@@ -24,7 +24,7 @@ int main() {
     const char *s2 = "world";
 
     using namespace hooker;
-    HookerFactory* factory = HookerFactory::getInstance();
+	std::unique_ptr<HookerFactory> factory = HookerFactory::getInstance();
     const Hooker& hooker = factory->getHooker();
     hooker.hook(reinterpret_cast<void *>(strcmp), reinterpret_cast<void *>(my_strcmp), nullptr);
 
@@ -41,8 +41,6 @@ int main() {
     } else {
         print("not equal");
     }
-
-	delete factory;
 
     return 0;
 }
