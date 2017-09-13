@@ -9,10 +9,10 @@
 #include <config.h>
 #include <HookerError.h>
 
-hooker::HookerFactory* hooker::HookerFactory::getInstance() {
+std::unique_ptr<hooker::HookerFactory> hooker::HookerFactory::getInstance() {
 	using namespace utils::design_pattern;
 	HookerFactory* result =  Singleton<HookerFactory,MultiThreadPolicy>::getInstance();
-	return result;
+	return std::unique_ptr<HookerFactory>(result);
 }
 
 hooker::Hooker* hooker::HookerFactory::createHooker() {

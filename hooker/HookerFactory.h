@@ -13,7 +13,7 @@
 namespace hooker {
     class HookerFactory {
     public:
-        static HookerFactory* getInstance();
+        static std::unique_ptr<HookerFactory> getInstance();
 		const Hooker& getHooker() const;
 		Hooker* createHooker();
 		~HookerFactory() {
