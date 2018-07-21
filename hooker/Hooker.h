@@ -17,7 +17,7 @@ namespace hooker {
     public:
         void changeCodeAttrs(void *func, int attr) const;
         void hook(void *func, void *newAddr, void **origFunc, bool saveOrig = true) const;
-        void unhook(void *func) const;
+        void unhook(void *func, void *oldFunc = nullptr) const;
         virtual size_t getHookHeadSize() const = 0;
 
 		// when construct the origin function, it's best to know
@@ -31,7 +31,7 @@ namespace hooker {
 
     protected:
         virtual void doHook(void *func, void *newAddr, void **origFunc) const = 0;
-        virtual void doUnHook(void *func) const;
+        virtual void doUnHook(void *func, void *oldFunc = nullptr) const;
         mutable std::unordered_map<long,long> gHookedMap;
     private:
         void saveOriginFuncBytes(void *func) const;

@@ -11,8 +11,14 @@ void print(const char *s) {
     std::cout << s << std::endl;
 }
 
+int (*old_strcmp)(const char *, const char *);
+
 int my_strcmp(const char *s1, const char *s2) {
     std::cout << s1 << " " << s2 << ",haha, it's been hooked" << std::endl;
+
+	if (old_strcmp) {
+		std::cout << "old result is: " << old_strcmp(s1, s2) << std::endl;
+	}
     return 0;
 }
 
@@ -23,7 +29,7 @@ int main() {
     using namespace hooker;
 	std::unique_ptr<HookerFactory> factory = HookerFactory::getInstance();
     const Hooker& hooker = factory->getHooker();
-    hooker.hook(reinterpret_cast<void *>(strcmp), reinterpret_cast<void *>(my_strcmp), nullptr);
+    hooker.hook(reinterpret_cast<void*>(strcmp), reinterpret_cast<void*>(my_strcmp), reinterpret_cast<void**>(&old_strcmp));
 
     if (strcmp(s1,s2) == 0) {
         print("equal");
@@ -31,7 +37,7 @@ int main() {
         print("not equal");
     }
 
-    hooker.unhook(reinterpret_cast<void *>(strcmp));
+    hooker.unhook(reinterpret_cast<void*>(strcmp), reinterpret_cast<void*>(old_strcmp));
 
     if (strcmp(s1,s2) == 0) {
         print("equal");

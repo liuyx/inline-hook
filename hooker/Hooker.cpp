@@ -57,7 +57,11 @@ void hooker::Hooker::saveOriginFuncBytes(void *func) const {
 
 }
 
-void hooker::Hooker::doUnHook(void *func) const {
+void hooker::Hooker::doUnHook(void *func, void *oldfunc) const {
+	if (oldfunc != nullptr) {
+		changeCodeAttrs(oldfunc, CODE_WRITE);
+		free(oldfunc);
+	}
     long addr = gHookedMap[(long)func];
     if (addr == 0)
         throw hooker::error::HookerError("it must be hooked before");
@@ -66,8 +70,8 @@ void hooker::Hooker::doUnHook(void *func) const {
 	gHookedMap.erase((long)func);
 }
 
-void hooker::Hooker::unhook(void *func) const {
+void hooker::Hooker::unhook(void *func, void *oldfunc) const {
     changeCodeAttrs(func,CODE_WRITE);
-    doUnHook(func);
+    doUnHook(func, oldfunc);
     changeCodeAttrs(func,CODE_READ_ONLY);
 }
