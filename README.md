@@ -63,5 +63,5 @@ int main() {
 ```
 
 The output is as below:
-![image](imgs/crop.png)
+![image](imgs/crop2.png)
 
